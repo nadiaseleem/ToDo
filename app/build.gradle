@@ -62,5 +62,7 @@ dependencies {
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 
+    //swipe to delete library
+    implementation 'com.github.zerobranch:SwipeLayout:1.3.1'
 
 }
