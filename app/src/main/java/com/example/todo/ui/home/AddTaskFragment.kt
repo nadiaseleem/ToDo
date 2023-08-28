@@ -9,14 +9,17 @@ import com.example.todo.dao.TasksDao
 import com.example.todo.databinding.FragmentAddTaskBinding
 import com.example.todo.db.TasksDatabase
 import com.example.todo.model.Task
+import com.example.todo.utils.getHourIn12
+import com.example.todo.utils.getTimeAmPm
 import com.example.todo.utils.showDatePickerDialog
+import com.example.todo.utils.showTimePickerDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Calendar
 
 class AddTaskFragment : BottomSheetDialogFragment() {
     lateinit var binding: FragmentAddTaskBinding
     lateinit var dao: TasksDao
-    lateinit var calendar: Calendar
+    private var calendar = Calendar.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,22 +34,48 @@ class AddTaskFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onSelectDateClick()
-        onAddtaskClick()
+        onSelectTimeClick()
+        onAddTaskClick()
 
     }
 
-    private fun onAddtaskClick() {
+    private fun onSelectTimeClick() {
+        binding.selectTimeTil.setOnClickListener {
+
+            val calendar = Calendar.getInstance()
+
+            showTimePickerDialog(
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                title = "Select task time",
+                childFragmentManager
+            ) { hour, minutes ->
+                val minuteString = if (minutes == 0) "00" else minutes.toString()
+                binding.selectTimeTv.text =
+                    "${getHourIn12(hour)}:${minuteString} ${getTimeAmPm(hour)}"
+                this.calendar.set(Calendar.HOUR_OF_DAY, hour)
+                this.calendar.set(Calendar.MINUTE, minutes)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+            }
+
+        }
+    }
+
+    private fun onAddTaskClick() {
         binding.addTaskBtn.setOnClickListener {
             createTask()
         }
     }
 
     private fun onSelectDateClick() {
-        binding.selectTimeTil.setOnClickListener {
+        binding.selectDateTil.setOnClickListener {
             context?.let { context ->
                 showDatePickerDialog(context) { date, calendar ->
-                    this.calendar = calendar
-                    binding.selectTimeTv.text = date
+                    this.calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+                    this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                    this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                    binding.selectDateTv.text = date
                 }
             }
         }
@@ -70,6 +99,8 @@ class AddTaskFragment : BottomSheetDialogFragment() {
             dateTime = calendar.timeInMillis
         )
         dao.insertTask(task)
+        onTaskAddedListener?.onTaskAdded()
+
         dismiss()
 
 
@@ -84,14 +115,27 @@ class AddTaskFragment : BottomSheetDialogFragment() {
             binding.titleTil.error = null
         }
 
+        if (binding.selectDateTv.text.isNullOrBlank()) {
+            isValid = false
+            binding.selectDateTil.error = getString(R.string.add_task_date)
+        } else {
+            binding.selectDateTil.error = null
+        }
+
         if (binding.selectTimeTv.text.isNullOrBlank()) {
             isValid = false
-            binding.selectTimeTil.error = getString(R.string.add_task_date)
+            binding.selectTimeTil.error = getString(R.string.add_task_time)
         } else {
             binding.selectTimeTil.error = null
         }
 
         return isValid
 
+    }
+
+    var onTaskAddedListener: OnTaskAddedListener? = null
+
+    fun interface OnTaskAddedListener {
+        fun onTaskAdded()
     }
 }

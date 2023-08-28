@@ -6,10 +6,13 @@
     <string name="enter_your_task">enter your task</string>
     <string name="enter_task_description">enter task description</string>
     <string name="select_date">Select Date</string>
+    <string name="select_time">Select time</string>
+
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="add_new_task">Add New Task</string>
     <string name="add_task_title">"please enter a title"</string>
     <string name="add_task_date">"please select a date "</string>
+    <string name="add_task_time">"please select a time "</string>
 
 </resources>

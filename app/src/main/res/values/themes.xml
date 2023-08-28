@@ -9,6 +9,12 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="floatingActionButtonStyle">@style/fab_style</item>
+
+    </style>
+
+    <style name="ThemeOverlay.App.TimePicker" parent="Widget.Material3.MaterialTimePicker.Clock">
+        <item name="clockFaceBackgroundColor">@color/lime</item>
+        <item name="clockHandColor">@color/blue</item>
     </style>
 
     <style name="Base.Theme.ToDo.splash" parent="Theme.Material3.DayNight.NoActionBar">

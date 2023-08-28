@@ -8,18 +8,20 @@ import com.example.todo.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
     lateinit var binding: ActivityHomeBinding
+    private var tasksFragment: TasksFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showFragment(TasksFragment())
+        tasksFragment = TasksFragment()
+
+        showFragment(tasksFragment!!)
 
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             if (menuItem.itemId == R.id.tasks) {
-                showFragment(TasksFragment())
+                showFragment(tasksFragment!!)
             } else if (menuItem.itemId == R.id.settings) {
                 showFragment(SettingsFragment())
-
             }
             true
         }
@@ -37,6 +39,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showAddTaskBottomSheet() {
         val bottomSheet = AddTaskFragment()
+        bottomSheet.onTaskAddedListener = AddTaskFragment.OnTaskAddedListener {
+            tasksFragment!!.loadAllTasks()
+        }
         bottomSheet.show(supportFragmentManager, "")
     }
 

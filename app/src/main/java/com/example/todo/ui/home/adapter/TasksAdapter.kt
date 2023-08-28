@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.databinding.ItemTaskBinding
 import com.example.todo.model.Task
+import com.example.todo.utils.getHourIn12
+import com.example.todo.utils.getTimeAmPm
+import java.util.Calendar
 
 class TasksAdapter(var tasks: MutableList<Task>? = null) :
     RecyclerView.Adapter<TasksAdapter.ViewHolder>() {
@@ -19,7 +22,13 @@ class TasksAdapter(var tasks: MutableList<Task>? = null) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = tasks?.get(position)!!
         holder.binding.title.text = task.title
-        holder.binding.date.text = task.dateTime.toString()
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = task.dateTime!!
+
+        val hr = calendar.get(Calendar.HOUR)
+        val min = calendar.get(Calendar.MINUTE)
+        val minutesString = if (min == 0) "00" else min.toString()
+        holder.binding.time.text = "${getHourIn12(hr)}:$minutesString ${getTimeAmPm(hr)}"
 
     }
 

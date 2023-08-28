@@ -41,7 +41,7 @@ class TasksFragment : Fragment() {
         loadAllTasks()
     }
 
-    private fun loadAllTasks() {
+    fun loadAllTasks() {
         tasks = dao.getAllTasks().toMutableList()
         tasksAdapter.updateTasks(tasks)
 
