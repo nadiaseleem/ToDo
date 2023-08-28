@@ -48,6 +48,19 @@
         <item name="background">@drawable/circle</item>
     </style>
 
+    <style name="bottom_sheet_bg">
+        <item name="background">@color/white</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Modal</item>
+    </style>
+
+    <style name="Modal" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_bg</item>
+    </style>
+
+
     <style name="fab_style" parent="Widget.Design.FloatingActionButton">
         <item name="shapeAppearanceOverlay">@style/fab_rounded</item>
     </style>
