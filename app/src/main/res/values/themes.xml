@@ -37,6 +37,11 @@
         <item name="android:backgroundTint">@color/white</item>
     </style>
 
+    <style name="task_item_style">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+
     <style name="background_color">
         <item name="android:background">@color/lime</item>
     </style>
@@ -45,7 +50,7 @@
     <style name="fab_rounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
-        <item name="background">@drawable/circle</item>
+        <item name="background">@drawable/button_bg</item>
     </style>
 
     <style name="bottom_sheet_bg">

@@ -47,7 +47,7 @@
     <style name="fab_rounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
-        <item name="background">@drawable/circle</item>
+        <item name="background">@drawable/button_bg</item>
     </style>
 
     <style name="fab_style" parent="Widget.Design.FloatingActionButton">
@@ -61,5 +61,10 @@
     <style name="Modal" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_sheet_bg</item>
     </style>
+
+    <style name="task_item_style">
+        <item name="android:backgroundTint">@color/black_blue_light</item>
+    </style>
+
 
 </resources>
