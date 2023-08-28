@@ -21,7 +21,6 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
                 binding.draggingBar.setBackgroundColor(Color.GREEN)
                 binding.title.setTextColor(Color.GREEN)
                 binding.btnTaskIsDone.setBackgroundResource(R.drawable.done)
-                binding.btnTaskIsDone.setImageResource(0)
 
 
             } else {
@@ -29,8 +28,7 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
                     binding.title.setTextColor(it)
                     binding.draggingBar.setBackgroundColor(it)
                 }
-                binding.btnTaskIsDone.setBackgroundResource(R.drawable.button_bg)
-                binding.btnTaskIsDone.setImageResource(R.drawable.ic_check)
+                binding.btnTaskIsDone.setBackgroundResource(R.drawable.check_mark)
 
             }
         }
@@ -63,6 +61,17 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
                 onButtonClickedListener.onButtonClicked(position, task)
             }
         }
+        onDeleteClickedListener?.let {
+            holder.binding.leftView.setOnClickListener {
+                onDeleteClickedListener?.onButtonClicked(position, task)
+            }
+        }
+
+        onItemClickedListener?.let {
+            holder.itemView.setOnClickListener {
+                onItemClickedListener?.onButtonClicked(position, task)
+            }
+        }
 
     }
 
@@ -76,9 +85,16 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
         notifyItemChanged(position)
     }
 
-    var onButtonClickedListener: OnButtonClickedListener? = null
+    fun deleteTask(task: Task) {
+        this.tasks?.remove(task)
+        notifyDataSetChanged()
+    }
 
-    fun interface OnButtonClickedListener {
+    var onItemClickedListener: OnItemClickedListener? = null
+    var onButtonClickedListener: OnItemClickedListener? = null
+    var onDeleteClickedListener: OnItemClickedListener? = null
+
+    fun interface OnItemClickedListener {
         fun onButtonClicked(position: Int, task: Task)
     }
 

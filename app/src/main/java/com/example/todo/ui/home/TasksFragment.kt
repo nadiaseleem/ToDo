@@ -36,10 +36,16 @@ class TasksFragment : Fragment() {
     private fun initRecyclerView() {
         binding.rvTasks.adapter = tasksAdapter
         tasksAdapter.onButtonClickedListener =
-            TasksAdapter.OnButtonClickedListener { position, task ->
+            TasksAdapter.OnItemClickedListener { position, task ->
                 task.idDone = !task.idDone
                 dao.updateTask(task)
                 tasksAdapter.updateTask(task, position)
+            }
+
+        tasksAdapter.onDeleteClickedListener =
+            TasksAdapter.OnItemClickedListener { position, task ->
+                dao.deleteTask(task)
+                tasksAdapter.deleteTask(task)
             }
     }
 
