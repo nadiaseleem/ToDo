@@ -2,6 +2,9 @@ package com.example.todo.utils
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -56,4 +59,9 @@ fun getHourIn12(hour: Int): Int {
 
 fun getTimeAmPm(hour: Int): String {
     return if (hour < 12) "AM" else "PM"
+}
+
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+    Build.VERSION.SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }

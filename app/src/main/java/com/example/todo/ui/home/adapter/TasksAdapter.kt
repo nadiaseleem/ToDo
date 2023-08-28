@@ -18,7 +18,7 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
 
         fun changeTaskStatus(isDone: Boolean, color: Int? = null) {
             if (isDone) {
-                binding.draggingBar.setBackgroundColor(Color.GREEN)
+                binding.draggingBar.setImageResource(R.drawable.dragging_bar_done)
                 binding.title.setTextColor(Color.GREEN)
                 binding.btnTaskIsDone.setBackgroundResource(R.drawable.done)
 
@@ -26,7 +26,7 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
             } else {
                 color?.let {
                     binding.title.setTextColor(it)
-                    binding.draggingBar.setBackgroundColor(it)
+                    binding.draggingBar.setImageResource(R.drawable.dragging_bar)
                 }
                 binding.btnTaskIsDone.setBackgroundResource(R.drawable.check_mark)
 
@@ -68,7 +68,7 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
         }
 
         onItemClickedListener?.let {
-            holder.itemView.setOnClickListener {
+            holder.binding.dragItem.setOnClickListener {
                 onItemClickedListener?.onButtonClicked(position, task)
             }
         }
