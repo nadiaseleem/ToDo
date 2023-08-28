@@ -18,7 +18,8 @@ import java.util.Calendar
 class TaskDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityTaskDetailsBinding
     lateinit var dao: TasksDao
-    private var calendar = Calendar.getInstance()
+    private var dateCalendar = Calendar.getInstance()
+    private var timeCalendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +46,15 @@ class TaskDetailsActivity : AppCompatActivity() {
         val task = intent.parcelable<Task>(Constants.TASK_KEY) as Task
         binding.content.title.setText(task.title)
         binding.content.description.setText(task.description)
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = task.dateTime!!
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minutes = calendar.get(Calendar.MINUTE)
+        val dateCalendar = Calendar.getInstance()
+        dateCalendar.timeInMillis = task.date!!
+        val year = dateCalendar.get(Calendar.YEAR)
+        val month = dateCalendar.get(Calendar.MONTH)
+        val day = dateCalendar.get(Calendar.DAY_OF_MONTH)
+        val timeCalendar = Calendar.getInstance()
+        timeCalendar.timeInMillis = task.time!!
+        val hour = timeCalendar.get(Calendar.HOUR_OF_DAY)
+        val minutes = timeCalendar.get(Calendar.MINUTE)
         val minuteString = if (minutes == 0) "00" else minutes.toString()
 
         binding.content.selectDateTv.text = "$day/${month + 1}/$year"
@@ -73,10 +76,13 @@ class TaskDetailsActivity : AppCompatActivity() {
                 val minuteString = if (minutes == 0) "00" else minutes.toString()
                 binding.content.selectTimeTv.text =
                     "${getHourIn12(hour)}:${minuteString} ${getTimeAmPm(hour)}"
-                this.calendar.set(Calendar.HOUR_OF_DAY, hour)
-                this.calendar.set(Calendar.MINUTE, minutes)
-                this.calendar.set(Calendar.SECOND, 0)
-                this.calendar.set(Calendar.MILLISECOND, 0)
+                this.timeCalendar.set(Calendar.YEAR, 0)
+                this.timeCalendar.set(Calendar.MONTH, 0)
+                this.timeCalendar.set(Calendar.DAY_OF_MONTH, 0)
+                this.timeCalendar.set(Calendar.HOUR_OF_DAY, hour)
+                this.timeCalendar.set(Calendar.MINUTE, minutes)
+                this.timeCalendar.set(Calendar.SECOND, 0)
+                this.timeCalendar.set(Calendar.MILLISECOND, 0)
             }
 
         }
@@ -85,9 +91,13 @@ class TaskDetailsActivity : AppCompatActivity() {
     private fun onSelectDateClick() {
         binding.content.selectDateTil.setOnClickListener {
             showDatePickerDialog(this) { date, calendar ->
-                this.calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
-                this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-                this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                this.dateCalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+                this.dateCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                this.dateCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                this.timeCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                this.timeCalendar.set(Calendar.MINUTE, 0)
+                this.timeCalendar.set(Calendar.SECOND, 0)
+                this.timeCalendar.set(Calendar.MILLISECOND, 0)
                 binding.content.selectDateTv.text = date
             }
         }
@@ -112,7 +122,8 @@ class TaskDetailsActivity : AppCompatActivity() {
         val task = intent.parcelable<Task>(Constants.TASK_KEY) as Task
         task.title = binding.content.title.text.toString()
         task.description = binding.content.description.text.toString()
-        task.dateTime = calendar.timeInMillis
+        task.date = dateCalendar.timeInMillis
+        task.time = timeCalendar.timeInMillis
 
         dao.updateTask(task)
         finish()

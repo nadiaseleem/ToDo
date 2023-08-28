@@ -19,7 +19,8 @@ import java.util.Calendar
 class AddTaskFragment : BottomSheetDialogFragment() {
     lateinit var binding: FragmentAddTaskBinding
     lateinit var dao: TasksDao
-    private var calendar = Calendar.getInstance()
+    private var dateCalendar = Calendar.getInstance()
+    private var timeCalendar = Calendar.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,10 +54,13 @@ class AddTaskFragment : BottomSheetDialogFragment() {
                 val minuteString = if (minutes == 0) "00" else minutes.toString()
                 binding.selectTimeTv.text =
                     "${getHourIn12(hour)}:${minuteString} ${getTimeAmPm(hour)}"
-                this.calendar.set(Calendar.HOUR_OF_DAY, hour)
-                this.calendar.set(Calendar.MINUTE, minutes)
-                calendar.set(Calendar.SECOND, 0)
-                calendar.set(Calendar.MILLISECOND, 0)
+                this.timeCalendar.set(Calendar.YEAR, 0)
+                this.timeCalendar.set(Calendar.MONTH, 0)
+                this.timeCalendar.set(Calendar.DAY_OF_MONTH, 0)
+                this.timeCalendar.set(Calendar.HOUR_OF_DAY, hour)
+                this.timeCalendar.set(Calendar.MINUTE, minutes)
+                this.timeCalendar.set(Calendar.SECOND, 0)
+                this.timeCalendar.set(Calendar.MILLISECOND, 0)
             }
 
         }
@@ -72,9 +76,16 @@ class AddTaskFragment : BottomSheetDialogFragment() {
         binding.selectDateTil.setOnClickListener {
             context?.let { context ->
                 showDatePickerDialog(context) { date, calendar ->
-                    this.calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
-                    this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-                    this.calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                    this.dateCalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+                    this.dateCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                    this.dateCalendar.set(
+                        Calendar.DAY_OF_MONTH,
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    )
+                    this.dateCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                    this.dateCalendar.set(Calendar.MINUTE, 0)
+                    this.dateCalendar.set(Calendar.SECOND, 0)
+                    this.dateCalendar.set(Calendar.MILLISECOND, 0)
                     binding.selectDateTv.text = date
                 }
             }
@@ -96,10 +107,12 @@ class AddTaskFragment : BottomSheetDialogFragment() {
         val task = Task(
             title = binding.title.text.toString().trim(),
             description = binding.description.text.toString().trim(),
-            dateTime = calendar.timeInMillis
+            date = dateCalendar.timeInMillis,
+            time = timeCalendar.timeInMillis
         )
+
         dao.insertTask(task)
-        onTaskAddedListener?.onTaskAdded()
+        onTaskAddedListener?.onTaskAdded(task)
 
         dismiss()
 
@@ -136,6 +149,6 @@ class AddTaskFragment : BottomSheetDialogFragment() {
     var onTaskAddedListener: OnTaskAddedListener? = null
 
     fun interface OnTaskAddedListener {
-        fun onTaskAdded()
+        fun onTaskAdded(task: Task)
     }
 }

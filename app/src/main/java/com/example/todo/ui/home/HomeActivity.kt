@@ -39,8 +39,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showAddTaskBottomSheet() {
         val bottomSheet = AddTaskFragment()
-        bottomSheet.onTaskAddedListener = AddTaskFragment.OnTaskAddedListener {
-            tasksFragment!!.loadAllTasks()
+        bottomSheet.onTaskAddedListener = AddTaskFragment.OnTaskAddedListener { task ->
+            tasksFragment!!.loadAllTasksOfDate(task.date!!)
+
         }
         bottomSheet.show(supportFragmentManager, "")
     }

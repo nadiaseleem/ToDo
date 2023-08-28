@@ -12,6 +12,7 @@ data class Task(
     val id: Int? = null,
     var title: String? = null,
     var description: String? = null,
-    var dateTime: Long? = null,
+    var date: Long? = null,
+    var time: Long? = null,
     var idDone: Boolean = false
 ) : Parcelable
