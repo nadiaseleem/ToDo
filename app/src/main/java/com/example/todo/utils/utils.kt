@@ -67,3 +67,7 @@ inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
 }
 
 
+fun getCurrentLanguage(context: Context): String {
+    val configuration = context.resources.configuration
+    return configuration.locales[0].language
+}

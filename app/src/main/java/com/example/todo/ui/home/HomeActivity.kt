@@ -19,8 +19,11 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             if (menuItem.itemId == R.id.tasks) {
                 showFragment(tasksFragment!!)
+                binding.title.text = getString(R.string.to_do_list)
+
             } else if (menuItem.itemId == R.id.settings) {
                 showFragment(SettingsFragment())
+                binding.title.text = getString(R.string.settings)
             }
             true
         }

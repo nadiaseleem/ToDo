@@ -1,5 +1,6 @@
 package com.example.todo.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.todo.R
 import com.example.todo.databinding.FragmentSettingsBinding
+import com.example.todo.utils.LocaleManager
+import com.example.todo.utils.getCurrentLanguage
 
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
@@ -23,24 +26,39 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val languages = resources.getStringArray(R.array.languages)
-        val arrayAdapterLanguages =
-            ArrayAdapter(requireContext(), R.layout.drop_down_item, languages)
-        binding.autoCompleteTVLanguages.setAdapter(arrayAdapterLanguages)
-
-        val modes = resources.getStringArray(R.array.modes)
-        val arrayAdapterModes = ArrayAdapter(requireContext(), R.layout.drop_down_item, modes)
-        binding.autoCompleteTVModes.setAdapter(arrayAdapterModes)
-        arrayAdapterModes.notifyDataSetChanged()
+        setLanguageSettings()
+        setModeSettings()
 
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setLanguageDropDownMenuState()
+        //TODO: get from share preferences later
+        val currentCountryCode = getCurrentLanguage(requireContext())
+        val language = if (currentCountryCode == "en") "English" else "Arabic"
+        setLanguageDropDownMenuState(language)
         setModeDropDownMenuState()
 
+        onModeDropDownMenuClick()
+        onLanguageDropDownMenuClick()
+        activity?.setTitle(getString(R.string.settings))
+
+
+    }
+
+    private fun onLanguageDropDownMenuClick() {
+        binding.autoCompleteTVLanguages.setOnItemClickListener { parent, view, position, id ->
+            val selectedLanguage = parent.getItemAtPosition(position).toString()
+            val languageCode = if (selectedLanguage == "English") "en" else "ar"
+            setLanguageDropDownMenuState(selectedLanguage)
+            applyLanguageChange(languageCode)
+
+        }
+    }
+
+    private fun onModeDropDownMenuClick() {
         binding.autoCompleteTVModes.setOnItemClickListener { parent, view, position, id ->
             val selectedMode = parent.getItemAtPosition(position).toString()
             setModeDropDownMenuState()
@@ -48,6 +66,21 @@ class SettingsFragment : Fragment() {
             changeMode(isDark)
 
         }
+    }
+
+    private fun setModeSettings() {
+        val modes = resources.getStringArray(R.array.modes)
+        val arrayAdapterModes = ArrayAdapter(requireContext(), R.layout.drop_down_item, modes)
+        binding.autoCompleteTVModes.setAdapter(arrayAdapterModes)
+        arrayAdapterModes.notifyDataSetChanged()
+
+    }
+
+    private fun setLanguageSettings() {
+        val languages = resources.getStringArray(R.array.languages)
+        val arrayAdapterLanguages =
+            ArrayAdapter(requireContext(), R.layout.drop_down_item, languages)
+        binding.autoCompleteTVLanguages.setAdapter(arrayAdapterLanguages)
 
     }
 
@@ -64,9 +97,8 @@ class SettingsFragment : Fragment() {
 
     }
 
-    private fun setLanguageDropDownMenuState() {
-        binding.autoCompleteTVLanguages.text
-
+    private fun setLanguageDropDownMenuState(selectedLanguage: String) {
+        binding.autoCompleteTVLanguages.setText(selectedLanguage)
     }
 
     private fun changeModeDropDownMenuIcon(selectedMode: String) {
@@ -89,4 +121,17 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun applyLanguageChange(languageCode: String) {
+        LocaleManager.setLocale(requireContext(), languageCode)
+        recreateActivity()
+    }
+
+}
+
+fun Fragment.recreateActivity() {
+    activity?.let {
+        val intent = Intent(it, it::class.java)
+        it.startActivity(intent)
+        it.finish()
+    }
 }
