@@ -52,7 +52,7 @@
             android:background="@android:color/transparent"
             app:itemActiveIndicatorStyle="@null"
             app:itemBackground="@null"
-            app:itemIconSize="33dp"
+            app:itemIconSize="25dp"
             app:itemIconTint="@color/selector_btm_nav_icon"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/nav_menu" />

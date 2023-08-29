@@ -20,6 +20,7 @@ class TaskDetailsActivity : AppCompatActivity() {
     lateinit var dao: TasksDao
     private var dateCalendar = Calendar.getInstance()
     private var timeCalendar = Calendar.getInstance()
+    private var myTask = Task()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,9 @@ class TaskDetailsActivity : AppCompatActivity() {
         onSelectDateClick()
         onSelectTimeClick()
         setupToolbar()
+        val task = intent.parcelable<Task>(Constants.TASK_KEY) as Task
+        myTask.date = task.date
+        myTask.time = task.time
 
     }
 
@@ -37,6 +41,7 @@ class TaskDetailsActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -83,6 +88,7 @@ class TaskDetailsActivity : AppCompatActivity() {
                 this.timeCalendar.set(Calendar.MINUTE, minutes)
                 this.timeCalendar.set(Calendar.SECOND, 0)
                 this.timeCalendar.set(Calendar.MILLISECOND, 0)
+                myTask.time = timeCalendar.timeInMillis
             }
 
         }
@@ -93,12 +99,14 @@ class TaskDetailsActivity : AppCompatActivity() {
             showDatePickerDialog(this) { date, calendar ->
                 this.dateCalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
                 this.dateCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-                this.dateCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+                this.dateCalendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH))
                 this.timeCalendar.set(Calendar.HOUR_OF_DAY, 0)
                 this.timeCalendar.set(Calendar.MINUTE, 0)
                 this.timeCalendar.set(Calendar.SECOND, 0)
                 this.timeCalendar.set(Calendar.MILLISECOND, 0)
                 binding.content.selectDateTv.text = date
+                myTask.date = dateCalendar.timeInMillis
+
             }
         }
 
@@ -125,7 +133,15 @@ class TaskDetailsActivity : AppCompatActivity() {
         task.date = dateCalendar.timeInMillis
         task.time = timeCalendar.timeInMillis
 
-        dao.updateTask(task)
+        myTask = task.copy(
+            id = task.id,
+            title = task.title,
+            description = task.description,
+            date = myTask.date,
+            time = myTask.time,
+            isDone = task.isDone
+        )
+        dao.updateTask(myTask)
         finish()
 
 

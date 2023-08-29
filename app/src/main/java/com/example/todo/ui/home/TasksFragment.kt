@@ -78,7 +78,7 @@ class TasksFragment : Fragment() {
         binding.rvTasks.adapter = tasksAdapter
         tasksAdapter.onButtonClickedListener =
             TasksAdapter.OnItemClickedListener { position, task ->
-                task.idDone = !task.idDone
+                task.isDone = !task.isDone
                 dao.updateTask(task)
                 tasksAdapter.updateTask(task, position)
             }
@@ -98,7 +98,7 @@ class TasksFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        dao = TasksDatabase.getInstance(requireContext()).tasksDao()
+        activity?.let { dao = TasksDatabase.getInstance(it.applicationContext).tasksDao() }
         loadAllTasksOfDate(selectedDate)
         tasksAdapter.setColor(ContextCompat.getColor(requireContext(), R.color.blue))
 

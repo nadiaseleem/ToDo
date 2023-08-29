@@ -19,7 +19,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:paddingBottom="10dp"
         android:background="@color/color_bg"
         app:cardCornerRadius="20dp"
         app:layout_constraintTop_toTopOf="@id/top_view"
@@ -28,7 +27,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/color_bg"
+            android:padding="10dp"
+
+            >
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/calendarView"

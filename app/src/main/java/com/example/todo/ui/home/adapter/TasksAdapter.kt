@@ -49,7 +49,7 @@ class TasksAdapter(var color: Int? = null, var tasks: MutableList<Task>? = null)
         holder.binding.title.text = task.title
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = task.time!!
-        holder.changeTaskStatus(task.idDone, color)
+        holder.changeTaskStatus(task.isDone, color)
 
         val hr = calendar.get(Calendar.HOUR)
         val min = calendar.get(Calendar.MINUTE)
