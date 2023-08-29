@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:mcv_calendarMode="week"
-        android:background="@color/bottom_sheet_bg"
+        android:background="@color/color_bg"
         app:mcv_selectionColor="@color/blue"
         app:mcv_dateTextAppearance="@style/CustomTextAppearance"
         app:mcv_showOtherDates="all" />

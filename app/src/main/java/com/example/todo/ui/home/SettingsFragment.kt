@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import com.example.todo.R
 import com.example.todo.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -18,8 +21,72 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        val languages = resources.getStringArray(R.array.languages)
+        val arrayAdapterLanguages =
+            ArrayAdapter(requireContext(), R.layout.drop_down_item, languages)
+        binding.autoCompleteTVLanguages.setAdapter(arrayAdapterLanguages)
+
+        val modes = resources.getStringArray(R.array.modes)
+        val arrayAdapterModes = ArrayAdapter(requireContext(), R.layout.drop_down_item, modes)
+        binding.autoCompleteTVModes.setAdapter(arrayAdapterModes)
+        arrayAdapterModes.notifyDataSetChanged()
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setLanguageDropDownMenuState()
+        setModeDropDownMenuState()
+
+        binding.autoCompleteTVModes.setOnItemClickListener { parent, view, position, id ->
+            val selectedMode = parent.getItemAtPosition(position).toString()
+            setModeDropDownMenuState()
+            val isDark = (selectedMode == "Dark")
+            changeMode(isDark)
+
+        }
+
     }
+
+    private fun setModeDropDownMenuState() {
+        val currentNightMode =
+            resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        if (currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_NO) {
+            binding.autoCompleteTVModes.setText(getString(R.string.light))
+            changeModeDropDownMenuIcon("Light")
+        } else {
+            binding.autoCompleteTVModes.setText(getString(R.string.dark))
+            changeModeDropDownMenuIcon("Dark")
+        }
+
+    }
+
+    private fun setLanguageDropDownMenuState() {
+        binding.autoCompleteTVLanguages.text
+
+    }
+
+    private fun changeModeDropDownMenuIcon(selectedMode: String) {
+        if (selectedMode == "Light") {
+            binding.modeTil.setStartIconDrawable(R.drawable.ic_light_mode)
+        } else {
+            binding.modeTil.setStartIconDrawable(R.drawable.ic_dark)
+        }
+        binding.modeTil.refreshStartIconDrawableState()
+    }
+
+    private fun changeMode(isDark: Boolean) {
+
+        if (isDark) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
 }

@@ -10,6 +10,6 @@
     <color name="black_blue">#060E1E</color>
     <color name="black_blue_light">#141922</color>
     <color name="grey">#C8C9CB</color>
-<color name="bottom_sheet_bg">@color/white</color>
+<color name="color_bg">@color/white</color>
     <color name="red">#ff5722</color>
 </resources>

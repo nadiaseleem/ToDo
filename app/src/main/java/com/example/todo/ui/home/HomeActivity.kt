@@ -15,7 +15,6 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         tasksFragment = TasksFragment()
 
-        showFragment(tasksFragment!!)
 
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             if (menuItem.itemId == R.id.tasks) {
@@ -26,8 +25,15 @@ class HomeActivity : AppCompatActivity() {
             true
         }
 
+
         onAddTaskClicked()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.bottomNavigation.selectedItemId = R.id.tasks
 
     }
 
