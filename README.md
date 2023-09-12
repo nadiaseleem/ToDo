@@ -8,16 +8,10 @@ The Todo app provides users with a versatile platform for managing their tasks. 
 📱 download app apk : https://www.mediafire.com/file/7lp6c5tk2lnwdw3/todo.apk/file
 
 <p align="center">
-  <img src="" width="279" height="600">
-    <img src="" width="279" height="600">
+ 
 
-  <img src="" width="279" height="600">
+https://github.com/nadiaseleem/ToDo/assets/37695970/cee4767c-b3d1-4e91-9648-731aa913931a
 
-  <img src="" width="279" height="600">
 
-  <img src="" width="279" height="600">
-
-  <img src="" width="279" height="600">
-  <img src="" width="279" height="600">
 </p>
 
